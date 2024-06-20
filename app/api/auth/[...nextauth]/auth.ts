@@ -1,11 +1,14 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 import credentials from "next-auth/providers/credentials";
 import { getUserFromDB } from "@/utils/api";
-import { z } from "zod";
+import { loginSchema } from "@/lib/loginSchema";
+import { ZodError } from "zod";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
+    Google,
     GitHub,
     credentials({
       credentials: {
@@ -14,19 +17,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const schema = z.object({
-            phone: z.string(),
-            password: z.string(),
-          });
-          schema.parse(credentials);
-          const user = await getUserFromDB(credentials.phone as string, credentials.password as string);
-          if (user) {
-            return user;
-          } else {
+          const { phone, password } = await loginSchema.parseAsync(credentials);
+          const user = await getUserFromDB(phone, password);
+          if (!user) {
+            throw new Error("User not found.");
+          }
+          return user;
+        } catch (error) {
+          if (error instanceof ZodError) {
             return null;
           }
-        } catch (error) {
-          throw new Error("Invalid credentials");
         }
       },
     }),
