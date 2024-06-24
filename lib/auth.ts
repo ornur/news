@@ -14,6 +14,7 @@ const providers: Provider[] = [
     },
     async authorize(credentials) {
       try {
+        console.log(credentials)
         const response = await fetch(`${process.env.URI}/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

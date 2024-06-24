@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/components/ui/link";
+import  Link  from "next/link";
 
 const SIGNIN_ERROR_URL = "/error";
 

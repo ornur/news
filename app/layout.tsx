@@ -2,7 +2,6 @@ import './globals.css';
 
 import Link from 'next/link';
 import { Logo, SettingsIcon, UsersIcon, VercelLogo } from '@/components/icons';
-import { User } from './user';
 import { NavItem } from './nav-item';
 
 export default function RootLayout({
@@ -31,14 +30,6 @@ export default function RootLayout({
                     <UsersIcon className="h-4 w-4" />
                     Users
                   </NavItem>
-                  <NavItem href="/settings">
-                    <SettingsIcon className="h-4 w-4" />
-                    Settings
-                  </NavItem>
-                  <NavItem href="https://vercel.com/templates/next.js/admin-dashboard-tailwind-postgres-react-nextjs">
-                    <VercelLogo className="h-4 w-4" />
-                    Deploy
-                  </NavItem>
                 </nav>
               </div>
             </div>
@@ -52,7 +43,6 @@ export default function RootLayout({
                 <Logo />
                 <span className="">ACME</span>
               </Link>
-              <User />
             </header>
             {children}
           </div>

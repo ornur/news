@@ -2,7 +2,7 @@
 import axios from "axios";
 import { redirect } from "next/navigation";
 import { AuthError} from "next-auth";
-import { signIn } from "../lib/auth";
+import { signIn, signOut } from "../lib/auth";
 
 const axiosInstance = axios.create({
     baseURL: 'http://192.168.0.13:8080',
@@ -15,8 +15,10 @@ export const signInWithCredentials = async (credentials:{
 }) => {
   try {
     const result = await signIn("credentials", {
-      redirect: false,
-      ...credentials,
+      redirect: true,
+      callbackUrl: "/",
+      phone: credentials.phone,
+      password: credentials.password,
     });
     
   } catch (error) {
@@ -44,6 +46,16 @@ export const userRegister = async (name: string, phone: string, password: string
     throw error;
   }
 };
+
+export const logout = async () => {
+  try {
+    await axiosInstance.post("/logout");
+    localStorage.removeItem("token");
+    await signOut();
+  } catch (error) {
+    throw error;
+  }
+}
 
 export type SelectPost = ReturnType<typeof getPosts> extends Promise<infer T> ? T : never;
 
